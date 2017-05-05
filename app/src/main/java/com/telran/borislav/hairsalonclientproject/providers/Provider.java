@@ -40,7 +40,37 @@ public class Provider {
                 .build();
 
         Response response = client.newCall(request).execute();
-//        Log.d("My_TAG", response.body().string());
+        return response;
+    }
+
+    public Response put(String path, String data, String token) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+//        client.setConnectTimeout(15, TimeUnit.SECONDS);
+//        client.setReadTimeout(15,TimeUnit.SECONDS);
+        MediaType type = MediaType.parse("application/json; charset=utf-8");
+        RequestBody requestBody = RequestBody.create(type,data);
+        Request request = new Request.Builder()
+                .url(BASE_URL + path)
+                .put(requestBody)
+                .addHeader("Authorization",token)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+
+    public Response get(String path, String token) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+//        client.setConnectTimeout(15, TimeUnit.SECONDS);
+//        client.setReadTimeout(15,TimeUnit.SECONDS);
+        MediaType type = MediaType.parse("application/json; charset=utf-8");
+        Request request = new Request.Builder()
+                .url(BASE_URL + path)
+                .get()
+                .addHeader("Authorization",token)
+                .build();
+
+        Response response = client.newCall(request).execute();
         return response;
     }
 }

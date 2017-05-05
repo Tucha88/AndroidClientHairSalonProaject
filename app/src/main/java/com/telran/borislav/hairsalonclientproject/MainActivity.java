@@ -3,6 +3,8 @@ package com.telran.borislav.hairsalonclientproject;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.telran.borislav.hairsalonclientproject.models.Client;
+import com.telran.borislav.hairsalonclientproject.tasks.LoginTask;
 import com.telran.borislav.hairsalonclientproject.tasks.RegistrationTask;
 import com.telran.borislav.hairsalonclientproject.utils.Util;
 
@@ -29,7 +32,18 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Tra
         transaction.add(R.id.framgent_container,fragment,"FRAG_LOGIN");
         transaction.addToBackStack("FRAG1");
         transaction.commit();
+        SharedPreferences sharedPreferences = getSharedPreferences("AUTH", MODE_PRIVATE);
+        if (!sharedPreferences.getString("TOKEN","").isEmpty()){
+            startActivityForResult(new Intent(this, SecondActivity.class),1);
 
+        }
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == 1){
+                finish();
+        }
     }
 
     @Override
@@ -51,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Tra
                 transaction.commit();
                 break;
             case Util.START_LOGIN:
-                new RegistrationTask(client,"login/client/",this).execute();
+                new LoginTask(client,"login/client/",this).execute();
                 break;
         }
 
@@ -63,6 +77,16 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Tra
     @Override
     public void startRegistrationTask(Client client) {
         new RegistrationTask(client,"register/client/",this).execute();
-
     }
+
+    public void doOnPostExecute() {
+        RegisterFragment fragment = (RegisterFragment) manager.findFragmentByTag("FRAG_REGISTER");
+        fragment.doOnPostExecute();
+    }
+
+    public void doOnPreExecute() {
+        RegisterFragment fragment = (RegisterFragment) manager.findFragmentByTag("FRAG_REGISTER");
+        fragment.doOnPreExecute();
+    }
+
 }

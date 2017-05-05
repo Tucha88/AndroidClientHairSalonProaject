@@ -9,67 +9,59 @@
         android:layout_height="match_parent"
         android:layout_weight="3">
 
-       <RadioGroup
-           android:layout_marginTop="30dp"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:id="@+id/check_box_women"
-           android:orientation="horizontal"
-           android:gravity="center">
+        <RadioGroup
+            android:id="@+id/check_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-           <RadioButton
-               android:id="@+id/radioButton"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginRight="2dp"
-               android:text="Woman" />
+            <RadioButton
+                android:id="@+id/woman"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:text="Woman" />
 
 
-           <RadioButton
-               android:id="@+id/radioButton1"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginRight="2dp"
+            <RadioButton
+                android:id="@+id/man"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:text="Man" />
 
-               android:text="Man" />
+            <RadioButton
+                android:id="@+id/both"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:text="All" />
+        </RadioGroup>
 
-           <RadioButton
-               android:id="@+id/radioButton2"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginRight="2dp"
-               android:text="All" />
-       </RadioGroup>
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/check_box_women"
-        android:layout_marginTop="17dp"
-            />
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/check_box"
+            android:layout_marginTop="17dp" />
 
         <Spinner
             android:id="@+id/spinner_language"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
+            android:layout_below="@id/spinner"
             android:entries="@array/lang"
-            android:prompt="@string/language_prompt"/>
+            android:prompt="@string/language_prompt" />
 
         <EditText
-            android:layout_below="@+id/spinner_language"
-            android:id="@+id/finder_field"
+            android:id="@+id/finder_field_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Find by address"
-
-            />
-
-
-
+            android:layout_alignParentBottom="true"
+            android:hint="Enter by address" />
 
     </RelativeLayout>
 
@@ -77,6 +69,6 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"/>
+        android:layout_weight="2" />
 
 </LinearLayout>

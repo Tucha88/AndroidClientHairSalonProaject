@@ -1,6 +1,5 @@
 package com.telran.borislav.hairsalonclientproject.tasks;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,33 +10,26 @@ import com.squareup.okhttp.Response;
 import com.telran.borislav.hairsalonclientproject.MainActivity;
 import com.telran.borislav.hairsalonclientproject.SecondActivity;
 import com.telran.borislav.hairsalonclientproject.models.Client;
-import com.telran.borislav.hairsalonclientproject.models.ClientAuthType;
 import com.telran.borislav.hairsalonclientproject.models.Token;
 import com.telran.borislav.hairsalonclientproject.providers.Provider;
 
 import java.io.IOException;
 
 /**
- * Created by Boris on 12.04.2017.
+ * Created by Boris on 05.05.2017.
  */
 
-public class RegistrationTask extends AsyncTask<Void, Void, String> {
+public class LoginTask extends AsyncTask<Void, Void, String> {
     private Client auth;
     private String path;
     private Context context;
 
-    public RegistrationTask(Client auth, String path, Context context) {
+    public LoginTask(Client auth, String path, Context context) {
         this.auth = auth;
         this.path = path;
         this.context = context;
     }
 
-    @Override
-    protected void onPreExecute() {
-        MainActivity activity1 = (MainActivity) context;
-        activity1.doOnPreExecute();
-        super.onPreExecute();
-    }
 
     @Override
     protected String doInBackground(Void... voids) {
@@ -75,16 +67,12 @@ public class RegistrationTask extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String s) {
         if (s.equals("Registration ok!")) {
             context.startActivity(new Intent(context, SecondActivity.class));
-            MainActivity activity1 = (MainActivity) context;
-            activity1.getFragmentManager().popBackStack();
-
+            MainActivity activity = (MainActivity) context;
+            activity.startActivityForResult(new Intent(context, SecondActivity.class),1);
         } else {
-
-            MainActivity activity1 = (MainActivity) context;
-            activity1.doOnPostExecute();
-            activity1.toastMethod(s);
+            MainActivity activity = (MainActivity) context;
+            activity.toastMethod(s);
 
         }
-
     }
 }
