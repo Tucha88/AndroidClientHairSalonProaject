@@ -90,12 +90,12 @@ public class SecondActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_appointment) {
             manager = getFragmentManager();
             Fragment fragment = new MapFragment();
             transaction = manager.beginTransaction();
-            transaction.replace(R.id.second_fragment_controller, fragment, "FRAG_LOGIN");
+            transaction.replace(R.id.second_fragment_controller, fragment, "FRAG_MAP");
             transaction.commit();
             MapFragment mapFragment = (MapFragment) manager.findFragmentById(R.id.second_fragment_controller);
 
@@ -111,11 +111,7 @@ public class SecondActivity extends AppCompatActivity
             finish();
 
         }
-//        else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

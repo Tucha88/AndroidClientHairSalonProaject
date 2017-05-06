@@ -74,16 +74,13 @@ public class RegistrationTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         if (s.equals("Registration ok!")) {
-            context.startActivity(new Intent(context, SecondActivity.class));
-            MainActivity activity1 = (MainActivity) context;
-            activity1.getFragmentManager().popBackStack();
-
+            MainActivity activity = (MainActivity) context;
+            activity.getFragmentManager().popBackStack();
+            activity.startActivityForResult(new Intent(context, SecondActivity.class),1);
         } else {
-
             MainActivity activity1 = (MainActivity) context;
             activity1.doOnPostExecute();
             activity1.toastMethod(s);
-
         }
 
     }

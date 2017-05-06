@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.telran.borislav.hairsalonclientproject.R;
 import com.telran.borislav.hairsalonclientproject.models.Client;
+import com.telran.borislav.hairsalonclientproject.tasks.LoginTask;
 import com.telran.borislav.hairsalonclientproject.utils.Util;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
@@ -20,6 +22,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private TextView createAccountTextView;
     private Button loginBtn;
     private TransactionControllerListener listener1;
+    private FrameLayout progressBar;
 
 
     @Nullable
@@ -33,6 +36,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         loginBtn.setOnClickListener(this);
         createAccountTextView.setOnClickListener(this);
         setListener1((TransactionControllerListener) getActivity());
+        progressBar = (FrameLayout) view.findViewById(R.id.login_progress_bar);
         return view;
     }
 
@@ -47,11 +51,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             case R.id.login_btn:Client client = new Client();
                 client.setClientEmail(loginEditText.getText().toString());
                 client.setClientPassword(passwordEditText.getText().toString());
-                listener1.goToNextFragment(Util.START_LOGIN,client);
+                new LoginTask(client,"login/client/",getActivity()).execute();
                 break;
             case R.id.register_text_link:
-
-                listener1.goToNextFragment(Util.START_SIGNEUP,null);
+                listener1.goToNextFragment(Util.START_SIGNEUP);
 
                 break;
         }
@@ -60,7 +63,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 
     interface TransactionControllerListener {
-        void goToNextFragment(int whatFragmentToGo, Client client);
+        void goToNextFragment(int whatFragmentToGo);
     }
+
+
+    public void doOnPostExecute() {
+        progressBar.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void doOnPreExecute() {
+        progressBar.setOnClickListener(null);
+        progressBar.setVisibility(View.VISIBLE);
+
+    }
+
 
 }

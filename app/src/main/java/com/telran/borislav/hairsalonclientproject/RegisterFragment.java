@@ -11,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.telran.borislav.hairsalonclientproject.models.Client;
+import com.telran.borislav.hairsalonclientproject.tasks.RegistrationTask;
 
 /**
  * Created by Boris on 11.04.2017.
@@ -23,15 +25,10 @@ import com.telran.borislav.hairsalonclientproject.models.Client;
 public class RegisterFragment extends Fragment implements View.OnClickListener {
     private EditText emailEditText, passwordEditText, passwordCheckEditText, nameEditText, lastNameEditText, phoneNumberEditText;
     private Button registerBtn, cancelRegistrationBtn;
-    private RegisterButtonListener listener;
     private Client client;
     private LinearLayout registrationLayout;
-    private ProgressBar progressBar;
+    private FrameLayout progressBar;
 
-
-    public void setListener(RegisterButtonListener listener) {
-        this.listener = listener;
-    }
 
     @Nullable
     @Override
@@ -45,11 +42,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         phoneNumberEditText = (EditText) view.findViewById(R.id.register_phone_number_edit_text);
         registerBtn = (Button) view.findViewById(R.id.register_btn);
         cancelRegistrationBtn = (Button) view.findViewById(R.id.cancel_registration_btn);
-        setListener((RegisterButtonListener) getActivity());
         registerBtn.setOnClickListener(this);
         cancelRegistrationBtn.setOnClickListener(this);
         registrationLayout = (LinearLayout) view.findViewById(R.id.registration_linear_layout);
-        progressBar = (ProgressBar) view.findViewById(R.id.registration_progress_bar);
+        progressBar = (FrameLayout) view.findViewById(R.id.registration_progress_bar);
         progressBar.setVisibility(View.INVISIBLE);
         return view;
     }
@@ -68,8 +64,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             String clientLastName = lastNameEditText.getText().toString();
             client = new Client(clientPhoneNumber, clientEmail, clientPassword, clientName, clientLastName);
             Log.d("MY_TAG", "onClick: this is client" + client.toString());
-            listener.startRegistrationTask(client);
-        }
+
+            new RegistrationTask(client,"register/client/",getActivity()).execute();        }
         if (view.getId() == R.id.cancel_registration_btn) {
             getActivity().getFragmentManager().popBackStack();
         }
@@ -98,19 +94,15 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
 
     public void doOnPostExecute() {
-        registrationLayout.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
 
     }
 
     public void doOnPreExecute() {
-        registrationLayout.setVisibility(View.INVISIBLE);
+        progressBar.setOnClickListener(null);
         progressBar.setVisibility(View.VISIBLE);
 
     }
 
 
-    interface RegisterButtonListener {
-        void startRegistrationTask(Client client);
-    }
 }

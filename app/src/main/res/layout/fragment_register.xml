@@ -6,17 +6,6 @@
     android:scrollbarAlwaysDrawVerticalTrack="true">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:id="@+id/registration_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
-    </RelativeLayout>
-
     <LinearLayout
         android:id="@+id/registration_linear_layout"
         android:layout_width="match_parent"
@@ -148,4 +137,18 @@
 
     </LinearLayout>
 
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#74312525"
+        android:id="@+id/registration_progress_bar"
+        android:visibility="invisible"
+        >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 </RelativeLayout>
