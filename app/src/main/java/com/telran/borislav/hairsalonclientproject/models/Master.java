@@ -14,7 +14,7 @@ public class Master {
     private String lastName;
     private ArrayList<String> lang;
     private String masterType;
-    private ArrayList<Services> serivce = new ArrayList<Services>();
+    private ArrayList<Services> serivce = new ArrayList<>();
     private String addresses;
 
     public Master() {
