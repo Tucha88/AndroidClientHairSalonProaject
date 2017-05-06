@@ -44,7 +44,7 @@ import java.util.List;
  * Created by Boris on 19.04.2017.
  */
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener{
     private MapView mMapView;
     private GoogleMap googleMap;
     private RadioGroup radioGroup;
@@ -111,50 +111,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap mMap) {
         googleMap = mMap;
         googleMap.setOnMarkerClickListener(this);
-        Log.d(TAG, "onMapReady: hello this is before forloop");
         // For showing a move to my location button
-//                googleMap.setMyLocationEnabled(true);
+//         googleMap.setMyLocationEnabled(true);
 
-
-//
-//        for (Master master :
-//                masterArray.getMasters()) {
-//            Log.d(TAG, "onMapReady: " + master.getEmail());
-//            if (!master.getAddresses().isEmpty()){
-//                try {
-//                    List<Address> address = geocoder.getFromLocationName(master.getAddresses(), 1);
-//                    Address location = address.get(0);
-//                    location.getLatitude();
-//                    location.getLongitude();
-//
-//                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                googleMap.addMarker(new MarkerOptions().position(latLng).title(master.getName()).snippet(master.getEmail()));
-//            }
-//
-//        }
-
-//        for (int i = 0; i < strTest.length; i++) {
-//
-//        }
-        // For zooming automatically to the location of the marker
 //        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(12).build();
 //        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+//                View v = getActivity().getLayoutInflater().inflate(R.layout.info, null);
+
+                return null;
+            }
+        });
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
+        Log.d(TAG, "onMarkerClick: "+marker.getTitle());
         return false;
     }
 
-
-
-
-
-    //////////////////////////
     private void getAllMasters() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AUTH", getActivity().MODE_PRIVATE);
         String token = sharedPreferences.getString("TOKEN", "");
@@ -170,6 +152,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .build();
         OkHttpClient client = new OkHttpClient();
         client.newCall(request).enqueue(new Callback() {
+
             @Override
             public void onFailure(Request request, IOException e) {
                 handler.post(new ErrorRequest("wrong Number"));
@@ -195,8 +178,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             }
         });
-
-
 
     }
 
@@ -228,6 +209,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
 
+
+
     class RequestOk implements Runnable {
         private MasterArray masterOkArray;
 
@@ -254,7 +237,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             Toast.makeText(getActivity(),s,Toast.LENGTH_LONG).show();
         }
     }
-
 
 }
 
