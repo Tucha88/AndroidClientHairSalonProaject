@@ -16,9 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.telran.borislav.hairsalonclientproject.models.Master;
 
 public class SecondActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MapFragment.showSelectedMasterListener {
     private FragmentManager manager;
     private FragmentTransaction transaction;
 
@@ -93,11 +96,13 @@ public class SecondActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_appointment) {
             manager = getFragmentManager();
-            Fragment fragment = new MapFragment();
+            MapFragment fragment = new MapFragment();
+            fragment.setSelectedMasterListener(this);
             transaction = manager.beginTransaction();
             transaction.replace(R.id.second_fragment_controller, fragment, "FRAG_MAP");
+            transaction.addToBackStack("FRAG_MAP");
             transaction.commit();
-            MapFragment mapFragment = (MapFragment) manager.findFragmentById(R.id.second_fragment_controller);
+//            MapFragment mapFragment = (MapFragment) manager.findFragmentById(R.id.second_fragment_controller);
 
 
         } else if (id == R.id.nav_favorite) {
@@ -116,5 +121,16 @@ public class SecondActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void showMaster(Master master) {
+        Toast.makeText(this,master.getAddresses(),Toast.LENGTH_LONG).show();
+        MasterProfileFragment fragment = new MasterProfileFragment();
+        manager = getFragmentManager();
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.second_fragment_controller, fragment, "FRAG_MASTER_PROF");
+        transaction.addToBackStack("FRAG_MASTER_PROF");
+        transaction.commit();
     }
 }

@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/spinner"
             android:entries="@array/lang"
-            android:prompt="@string/language_prompt" />
+            android:prompt="@string/action_settings" />
 
         <EditText
             android:id="@+id/finder_field_edit_text"

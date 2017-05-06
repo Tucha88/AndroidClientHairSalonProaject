@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,12 +45,11 @@ import java.util.List;
  * Created by Boris on 19.04.2017.
  */
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener{
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
     private MapView mMapView;
     private GoogleMap googleMap;
     private RadioGroup radioGroup;
     private EditText findByAddres;
-    private ArrayList<String> str = new ArrayList<String>();
     private String[] strTest;
     private Handler handler;
     private static final String PATH = "/master/arraylist";
@@ -57,7 +57,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public static final String TAG = "ONTAG";
     private Geocoder geocoder;
     LatLng latLng = null;
+    private showSelectedMasterListener selectedMasterListener;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,12 +82,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         } catch (Exception e) {
             e.printStackTrace();
         }
-        getAllMasters();
 
         mMapView.getMapAsync(this);
+        getAllMasters();
 
 
         return rootView;
+    }
+
+    public void setSelectedMasterListener(showSelectedMasterListener selectedMasterListener) {
+        this.selectedMasterListener = selectedMasterListener;
     }
 
     @Override
@@ -116,19 +127,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 //        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(12).build();
 //        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-            @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
 
-            @Override
-            public View getInfoContents(Marker marker) {
-//                View v = getActivity().getLayoutInflater().inflate(R.layout.info, null);
+        googleMap.setOnInfoWindowClickListener(this);
 
-                return null;
-            }
-        });
     }
 
     @Override
@@ -196,7 +197,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     e.printStackTrace();
                 }
                 try {
-                    googleMap.addMarker(new MarkerOptions().position(latLng).title(master.getName()).snippet(master.getEmail()));
+                    googleMap.addMarker(new MarkerOptions().position(latLng).title(master.getEmail()).snippet(master.getAddresses()));
                 }catch (Exception e){
                     e.printStackTrace();
 
@@ -208,7 +209,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
-
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Master master = new Master();
+        ArrayList<Master> masters = masterArray.getMasters();
+        for (Master master1 : masters) {
+            if (master1.getEmail().equals(marker.getTitle())){
+                master = master1;
+                break;
+            }
+        }
+        selectedMasterListener.showMaster(master);
+    }
 
 
     class RequestOk implements Runnable {
@@ -238,6 +250,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
+
+
+    interface showSelectedMasterListener{
+        void showMaster(Master master);
+    }
 }
 
 
