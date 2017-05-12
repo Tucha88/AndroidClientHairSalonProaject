@@ -51,7 +51,9 @@ public class MasterProfileFragment extends Fragment implements View.OnClickListe
             masterAddress.setText(master.getAddresses());
             masterEmail.setText(master.getEmail());
             ArrayList<StateVO> listVOs = new ArrayList<>();
-
+            StateVO stateVO1 = new StateVO();
+            stateVO1.setTitle("Chose services");
+            listVOs.add(stateVO1);
             for (Services services : master.getSerivce()) {
                 StateVO stateVO = new StateVO();
                 Log.d("TAG", "Services " + " " + services.getService());
@@ -86,8 +88,6 @@ public class MasterProfileFragment extends Fragment implements View.OnClickListe
         }
 
     }
-
-
     interface TransferredMasterListener {
         void transferMaster(Master masterTransfer);
     }
