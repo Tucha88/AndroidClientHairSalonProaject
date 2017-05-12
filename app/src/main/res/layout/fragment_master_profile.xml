@@ -10,7 +10,7 @@
         <ImageView
             android:id="@+id/header_cover_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="70dp"
             android:scaleType="centerCrop"
              />
 
@@ -18,14 +18,13 @@
             android:id="@+id/user_profile_photo"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_below="@+id/header_cover_image"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-60dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/profile_circular_border_imageview"
             android:elevation="5dp"
             android:padding="20dp"
-            android:scaleType="centerCrop"
-             />
+            android:scaleType="centerCrop" />
 
         <RelativeLayout
             android:id="@+id/profile_layout"
@@ -56,26 +55,18 @@
                 />
 
             <TextView
-                android:id="@+id/user_profile_name"
+                android:id="@+id/profile_master_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/add_friend"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="76dp"
+                android:layout_marginTop="29dp"
                 android:text="Viral Android"
                 android:textColor="#fff"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/user_profile_short_bio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/user_profile_name"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
-                android:text="Android free tutorials and example"
-                android:textColor="#fff"
-                android:textSize="14sp" />
+
         </RelativeLayout>
 
 
@@ -87,6 +78,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/profile_master_email_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -94,9 +86,10 @@
                 android:clickable="true"
                 android:elevation="4dp"
                 android:padding="20dp"
-                android:text="Android Profile UI Design" />
+                android:text="Master email" />
 
             <TextView
+                android:id="@+id/profile_master_address_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -106,7 +99,7 @@
                 android:clickable="true"
                 android:elevation="4dp"
                 android:padding="20dp"
-                android:text="Android Profile XMl UI Design" />
+                android:text="Master address" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -116,9 +109,21 @@
                 android:clickable="true"
                 android:elevation="4dp"
                 android:padding="20dp"
-                android:text="Android Profile UI Design" />
+                android:text="List of services" />
+
+            <Spinner
+                android:id="@+id/profile_master_services_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:elevation="4dp"
+                android:padding="20dp" />
 
             <TextView
+                android:id="@+id/profile_master_description_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -128,17 +133,43 @@
                 android:clickable="true"
                 android:elevation="4dp"
                 android:padding="20dp"
-                android:text="Android Profile XMl UI Design" />
+                android:text="Master description" />
 
-            <TextView
-                android:layout_width="fill_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="#fff"
-                android:clickable="true"
-                android:elevation="4dp"
-                android:padding="20dp"
-                android:text="Android Profile UI Design" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/profile_master_cancel_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_weight="1"
+                    android:background="#41ba7a"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:padding="20dp"
+                    android:text="Cancel"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/profile_master_make_appointment_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="1"
+                    android:background="#41ba7a"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:padding="20dp"
+                    android:text="Make appointment"
+                    android:textAllCaps="false" />
+
+            </LinearLayout>
+
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

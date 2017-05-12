@@ -72,7 +72,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         radioGroup = (RadioGroup) rootView.findViewById(R.id.check_box);
         findByAddres = (EditText) rootView.findViewById(R.id.finder_field_edit_text);
         handler = new Handler();
-        geocoder =  new Geocoder(getActivity().getBaseContext());
+        geocoder = new Geocoder(getActivity().getBaseContext());
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
@@ -80,7 +80,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
 
         mMapView.getMapAsync(this);
-//        getAllMasters();
+
+
         new GetAllMasters().execute();
 
 
@@ -132,7 +133,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Log.d(TAG, "onMarkerClick: "+marker.getTitle());
+        Log.d(TAG, "onMarkerClick: " + marker.getTitle());
         return false;
     }
 
@@ -141,7 +142,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Master master = new Master();
         ArrayList<Master> masters = masterArray.getMasters();
         for (Master master1 : masters) {
-            if (master1.getEmail().equals(marker.getTitle())){
+            if (master1.getEmail().equals(marker.getTitle())) {
                 master = master1;
                 break;
             }
@@ -157,6 +158,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     class GetAllMasters extends AsyncTask<Void, Void, Void> {
         public GetAllMasters() {
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
         }
 
         @Override
@@ -187,7 +193,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
                     if (response.isSuccessful()) {
                         Gson gson = new Gson();
-                        MasterArray masterArray = gson.fromJson(response.body().string(), MasterArray.class);
+                        masterArray = gson.fromJson(response.body().string(), MasterArray.class);
                         if (masterArray != null) {
                             for (Master master : masterArray.getMasters()) {
                                 Log.d(TAG, "addMarkersToMap: " + master.getEmail() + master.getAddresses());
@@ -203,12 +209,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                                         e.printStackTrace();
                                     }
                                     handler.post(new FillMap(latLng, master));
-
                                 }
 
-
                             }
-//                            handler.post(new RequestOk(masterArray));
 
                         }
 
@@ -245,16 +248,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
 
-
     private class ErrorRequest implements Runnable {
-        protected  String s;
+        protected String s;
+
         public ErrorRequest(String s) {
             this.s = s;
         }
 
         @Override
         public void run() {
-            Toast.makeText(getActivity(),s,Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         }
     }
 }
