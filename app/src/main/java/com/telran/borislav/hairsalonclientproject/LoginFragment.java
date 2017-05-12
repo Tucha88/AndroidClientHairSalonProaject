@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.telran.borislav.hairsalonclientproject.R;
 import com.telran.borislav.hairsalonclientproject.models.Client;
+import com.telran.borislav.hairsalonclientproject.models.ClientAuthType;
 import com.telran.borislav.hairsalonclientproject.tasks.LoginTask;
 import com.telran.borislav.hairsalonclientproject.utils.Util;
 
@@ -48,10 +49,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.login_btn:Client client = new Client();
+            case R.id.login_btn:
+                ClientAuthType client = new ClientAuthType();
                 client.setClientEmail(loginEditText.getText().toString());
                 client.setClientPassword(passwordEditText.getText().toString());
-                new LoginTask(client,"login/client/",getActivity()).execute();
+                new LoginTask(client, "login/login/", getActivity()).execute();
                 break;
             case R.id.register_text_link:
                 listener1.goToNextFragment(Util.START_SIGNEUP);
@@ -60,12 +62,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
 
     }
-
-
-    interface TransactionControllerListener {
-        void goToNextFragment(int whatFragmentToGo);
-    }
-
 
     public void doOnPostExecute() {
         progressBar.setVisibility(View.INVISIBLE);
@@ -76,6 +72,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         progressBar.setOnClickListener(null);
         progressBar.setVisibility(View.VISIBLE);
 
+    }
+
+    interface TransactionControllerListener {
+        void goToNextFragment(int whatFragmentToGo);
     }
 
 

@@ -1,12 +1,12 @@
 package com.telran.borislav.hairsalonclientproject;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,9 +21,12 @@ import android.widget.Toast;
 import com.telran.borislav.hairsalonclientproject.models.Master;
 
 public class SecondActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MapFragment.showSelectedMasterListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MapFragment.showSelectedMasterListener, MasterProfileFragment.TransferredMasterListener {
+    public static final String TAG = "ONTAG";
     private FragmentManager manager;
     private FragmentTransaction transaction;
+    private Master master1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,15 +105,13 @@ public class SecondActivity extends AppCompatActivity
             transaction.replace(R.id.second_fragment_controller, fragment, "FRAG_MAP");
             transaction.addToBackStack("FRAG_MAP");
             transaction.commit();
-//            MapFragment mapFragment = (MapFragment) manager.findFragmentById(R.id.second_fragment_controller);
-
 
         } else if (id == R.id.nav_favorite) {
 
         } else if (id == R.id.nav_exit) {
             SharedPreferences sharedPreferences = getSharedPreferences("AUTH", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("TOKEN","");
+            editor.putString("TOKEN", "");
             editor.commit();
             setResult(RESULT_CANCELED);
             finish();
@@ -125,12 +126,23 @@ public class SecondActivity extends AppCompatActivity
 
     @Override
     public void showMaster(Master master) {
-        Toast.makeText(this,master.getAddresses(),Toast.LENGTH_LONG).show();
+        this.master1 = master;
         MasterProfileFragment fragment = new MasterProfileFragment();
         manager = getFragmentManager();
         transaction = manager.beginTransaction();
         transaction.replace(R.id.second_fragment_controller, fragment, "FRAG_MASTER_PROF");
         transaction.addToBackStack("FRAG_MASTER_PROF");
+
+
+        fragment.setMasterListener(this);
+        fragment.getMyMaster(master1);
+
         transaction.commit();
+
+    }
+
+    @Override
+    public void transferMaster(Master masterTransfer) {
+
     }
 }

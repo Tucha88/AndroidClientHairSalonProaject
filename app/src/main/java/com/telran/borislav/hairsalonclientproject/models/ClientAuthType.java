@@ -5,30 +5,30 @@ package com.telran.borislav.hairsalonclientproject.models;
  */
 
 public class ClientAuthType {
-    private String clientEmail;
-    private String clientPassword;
+    private String email;
+    private String password;
 
     public ClientAuthType(String clientEmail, String clientPassword) {
-        this.clientEmail = clientEmail;
-        this.clientPassword = clientPassword;
+        this.email = clientEmail;
+        this.password = clientPassword;
     }
 
     public ClientAuthType() {
     }
 
     public String getClientEmail() {
-        return clientEmail;
+        return email;
     }
 
     public void setClientEmail(String clientEmail) {
-        this.clientEmail = clientEmail;
+        this.email = clientEmail;
     }
 
     public String getClientPassword() {
-        return clientPassword;
+        return password;
     }
 
     public void setClientPassword(String clientPassword) {
-        this.clientPassword = clientPassword;
+        this.password = clientPassword;
     }
 }

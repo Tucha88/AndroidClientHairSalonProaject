@@ -10,6 +10,7 @@ import com.squareup.okhttp.Response;
 import com.telran.borislav.hairsalonclientproject.MainActivity;
 import com.telran.borislav.hairsalonclientproject.SecondActivity;
 import com.telran.borislav.hairsalonclientproject.models.Client;
+import com.telran.borislav.hairsalonclientproject.models.ClientAuthType;
 import com.telran.borislav.hairsalonclientproject.models.Token;
 import com.telran.borislav.hairsalonclientproject.providers.Provider;
 
@@ -20,11 +21,11 @@ import java.io.IOException;
  */
 
 public class LoginTask extends AsyncTask<Void, Void, String> {
-    private Client auth;
+    private ClientAuthType auth;
     private String path;
     private Context context;
 
-    public LoginTask(Client auth, String path, Context context) {
+    public LoginTask(ClientAuthType auth, String path, Context context) {
         this.auth = auth;
         this.path = path;
         this.context = context;

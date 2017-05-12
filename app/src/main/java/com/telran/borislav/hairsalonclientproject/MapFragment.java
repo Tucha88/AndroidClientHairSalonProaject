@@ -46,17 +46,17 @@ import java.util.List;
  */
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
+    public static final String TAG = "ONTAG";
+    private static final String PATH = "/guest/arraylist";
+    LatLng latLng = null;
     private MapView mMapView;
     private GoogleMap googleMap;
     private RadioGroup radioGroup;
     private EditText findByAddres;
     private String[] strTest;
     private Handler handler;
-    private static final String PATH = "/master/arraylist";
     private MasterArray masterArray = new MasterArray();
-    public static final String TAG = "ONTAG";
     private Geocoder geocoder;
-    LatLng latLng = null;
     private showSelectedMasterListener selectedMasterListener;
 
 
@@ -183,30 +183,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void addMarkersToMap(){
-        for (Master master : masterArray.getMasters()) {
-            Log.d(TAG, "addMarkersToMap: " + master.getEmail() + master.getAddresses());
-            if (master.getAddresses() !=null){
-                try {
-                    List<Address> address = geocoder.getFromLocationName(master.getAddresses(), 1);
-                    Address location = address.get(0);
-                    location.getLatitude();
-                    location.getLongitude();
-                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        new FillMap().run();
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    googleMap.addMarker(new MarkerOptions().position(latLng).title(master.getEmail()).snippet(master.getAddresses()));
-                }catch (Exception e){
-                    e.printStackTrace();
-
-                }
-
-            }
-
-
-        }
     }
 
     @Override
@@ -219,9 +197,45 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 break;
             }
         }
+        Log.d(TAG, "onInfoWindowClick: " + master.getEmail() + master.getAddresses());
         selectedMasterListener.showMaster(master);
     }
 
+    interface showSelectedMasterListener {
+        void showMaster(Master master);
+    }
+
+    class FillMap implements Runnable {
+
+
+        @Override
+        public void run() {
+            for (Master master : masterArray.getMasters()) {
+                Log.d(TAG, "addMarkersToMap: " + master.getEmail() + master.getAddresses());
+                if (master.getAddresses() != null) {
+                    try {
+                        List<Address> address = geocoder.getFromLocationName(master.getAddresses(), 1);
+                        Address location = address.get(0);
+                        location.getLatitude();
+                        location.getLongitude();
+                        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        googleMap.addMarker(new MarkerOptions().position(latLng).title(master.getEmail()).snippet(master.getAddresses()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                    }
+
+                }
+
+
+            }
+        }
+    }
 
     class RequestOk implements Runnable {
         private MasterArray masterOkArray;
@@ -238,6 +252,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         }
     }
+
     private class ErrorRequest implements Runnable {
         protected  String s;
         public ErrorRequest(String s) {
@@ -248,12 +263,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         public void run() {
             Toast.makeText(getActivity(),s,Toast.LENGTH_LONG).show();
         }
-    }
-
-
-
-    interface showSelectedMasterListener{
-        void showMaster(Master master);
     }
 }
 

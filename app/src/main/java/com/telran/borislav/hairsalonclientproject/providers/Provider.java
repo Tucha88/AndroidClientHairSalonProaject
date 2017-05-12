@@ -29,8 +29,6 @@ public class Provider {
 
     public Response post(String path, String data, String token) throws IOException {
         OkHttpClient client = new OkHttpClient();
-//        client.setConnectTimeout(15, TimeUnit.SECONDS);
-//        client.setReadTimeout(15,TimeUnit.SECONDS);
         MediaType type = MediaType.parse("application/json; charset=utf-8");
         RequestBody requestBody = RequestBody.create(type,data);
         Request request = new Request.Builder()
@@ -45,8 +43,6 @@ public class Provider {
 
     public Response put(String path, String data, String token) throws IOException {
         OkHttpClient client = new OkHttpClient();
-//        client.setConnectTimeout(15, TimeUnit.SECONDS);
-//        client.setReadTimeout(15,TimeUnit.SECONDS);
         MediaType type = MediaType.parse("application/json; charset=utf-8");
         RequestBody requestBody = RequestBody.create(type,data);
         Request request = new Request.Builder()
@@ -61,8 +57,6 @@ public class Provider {
 
     public Response get(String path, String token) throws IOException {
         OkHttpClient client = new OkHttpClient();
-//        client.setConnectTimeout(15, TimeUnit.SECONDS);
-//        client.setReadTimeout(15,TimeUnit.SECONDS);
         MediaType type = MediaType.parse("application/json; charset=utf-8");
         Request request = new Request.Builder()
                 .url(BASE_URL + path)
