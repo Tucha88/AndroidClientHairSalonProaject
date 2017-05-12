@@ -43,7 +43,7 @@ import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
     public static final String TAG = "ONTAG";
-    private static final String PATH = "/guest/arraylist";
+    private static final String PATH = "/guest/list";
     LatLng latLng = null;
     private MapView mMapView;
     private GoogleMap googleMap;
