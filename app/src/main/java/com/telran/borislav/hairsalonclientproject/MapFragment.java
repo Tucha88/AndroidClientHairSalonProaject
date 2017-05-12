@@ -1,7 +1,6 @@
 package com.telran.borislav.hairsalonclientproject;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
@@ -17,12 +16,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -35,7 +32,6 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import com.telran.borislav.hairsalonclientproject.models.Master;
 import com.telran.borislav.hairsalonclientproject.models.MasterArray;
-import com.telran.borislav.hairsalonclientproject.providers.Provider;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,7 +80,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
 
         mMapView.getMapAsync(this);
-        getAllMasters();
+//        getAllMasters();
+        new GetAllMasters().execute();
 
 
         return rootView;
@@ -128,6 +125,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 //        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(12).build();
 //        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+
         googleMap.setOnInfoWindowClickListener(this);
 
     }
@@ -136,55 +134,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public boolean onMarkerClick(Marker marker) {
         Log.d(TAG, "onMarkerClick: "+marker.getTitle());
         return false;
-    }
-
-    private void getAllMasters() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AUTH", getActivity().MODE_PRIVATE);
-        String token = sharedPreferences.getString("TOKEN", "");
-        Log.d(TAG, "getAllMasters: " + token);
-
-        MediaType type = MediaType.parse("application/json; charset=utf-8");
-        RequestBody requestBody = RequestBody.create(type, "");
-        Request request = new Request.Builder()
-                .url("https://hair-salon-personal.herokuapp.com/" + PATH)
-                .get()
-                .addHeader("Content-Type","application/json; charset=utf-8")
-                .addHeader("Authorization", token)
-                .build();
-        OkHttpClient client = new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
-
-            @Override
-            public void onFailure(Request request, IOException e) {
-                handler.post(new ErrorRequest("wrong Number"));
-
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                Log.d(TAG, "onResponse: "+ response.code());
-
-                if (response.isSuccessful()) {
-                    Gson gson = new Gson();
-                    MasterArray masterArray = gson.fromJson(response.body().string(), MasterArray.class);
-                    if (masterArray != null) {
-                        handler.post(new RequestOk(masterArray));
-
-                    }
-
-
-                } else if (response.code() == 401) {
-                    new ErrorRequest("WTF");
-                }
-
-            }
-        });
-
-    }
-
-    private void addMarkersToMap(){
-        new FillMap().run();
-
     }
 
     @Override
@@ -201,57 +150,101 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         selectedMasterListener.showMaster(master);
     }
 
+
     interface showSelectedMasterListener {
         void showMaster(Master master);
     }
 
-    class FillMap implements Runnable {
-
+    class GetAllMasters extends AsyncTask<Void, Void, Void> {
+        public GetAllMasters() {
+        }
 
         @Override
-        public void run() {
-            for (Master master : masterArray.getMasters()) {
-                Log.d(TAG, "addMarkersToMap: " + master.getEmail() + master.getAddresses());
-                if (master.getAddresses() != null) {
-                    try {
-                        List<Address> address = geocoder.getFromLocationName(master.getAddresses(), 1);
-                        Address location = address.get(0);
-                        location.getLatitude();
-                        location.getLongitude();
-                        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        protected Void doInBackground(Void... voids) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AUTH", getActivity().MODE_PRIVATE);
+            String token = sharedPreferences.getString("TOKEN", "");
+            Log.d(TAG, "getAllMasters: " + token);
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        googleMap.addMarker(new MarkerOptions().position(latLng).title(master.getEmail()).snippet(master.getAddresses()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            MediaType type = MediaType.parse("application/json; charset=utf-8");
+            RequestBody requestBody = RequestBody.create(type, "");
+            Request request = new Request.Builder()
+                    .url("https://hair-salon-personal.herokuapp.com/" + PATH)
+                    .get()
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .build();
+            OkHttpClient client = new OkHttpClient();
+            client.newCall(request).enqueue(new Callback() {
 
-                    }
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    handler.post(new ErrorRequest("wrong Number"));
 
                 }
 
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    Log.d(TAG, "onResponse: " + response.code());
 
-            }
+                    if (response.isSuccessful()) {
+                        Gson gson = new Gson();
+                        MasterArray masterArray = gson.fromJson(response.body().string(), MasterArray.class);
+                        if (masterArray != null) {
+                            for (Master master : masterArray.getMasters()) {
+                                Log.d(TAG, "addMarkersToMap: " + master.getEmail() + master.getAddresses());
+                                if (master.getAddresses() != null) {
+                                    try {
+                                        List<Address> address = geocoder.getFromLocationName(master.getAddresses(), 1);
+                                        Address location = address.get(0);
+                                        location.getLatitude();
+                                        location.getLongitude();
+                                        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    handler.post(new FillMap(latLng, master));
+
+                                }
+
+
+                            }
+//                            handler.post(new RequestOk(masterArray));
+
+                        }
+
+
+                    } else if (response.code() == 401) {
+                        new ErrorRequest("WTF");
+                    }
+
+                }
+            });
+            return null;
         }
     }
 
-    class RequestOk implements Runnable {
-        private MasterArray masterOkArray;
+    class FillMap implements Runnable {
+        LatLng latLng;
+        Master master;
 
-        public RequestOk(MasterArray masterOkArray) {
-            this.masterOkArray = masterOkArray;
+        public FillMap(LatLng latLng, Master master) {
+            this.latLng = latLng;
+            this.master = master;
         }
 
         @Override
         public void run() {
-            masterArray = masterOkArray;
-            Log.d(TAG, "RequestOk: " + masterArray.getMasters());
-            addMarkersToMap();
+            try {
+                googleMap.addMarker(new MarkerOptions().position(latLng).title(master.getEmail()).snippet(master.getAddresses()));
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
 
         }
     }
+
+
 
     private class ErrorRequest implements Runnable {
         protected  String s;
