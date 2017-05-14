@@ -33,8 +33,7 @@ public class MySpinnerAdapter extends ArrayAdapter<StateVO> {
     }
 
     @Override
-    public View getDropDownView(int position, View convertView,
-                                ViewGroup parent) {
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
         return getCustomView(position, convertView, parent);
     }
 
@@ -43,8 +42,7 @@ public class MySpinnerAdapter extends ArrayAdapter<StateVO> {
         return getCustomView(position, convertView, parent);
     }
 
-    public View getCustomView(final int position, View convertView,
-                              ViewGroup parent) {
+    public View getCustomView(final int position, View convertView, ViewGroup parent) {
 
         final ViewHolder holder;
         if (convertView == null) {
@@ -76,7 +74,9 @@ public class MySpinnerAdapter extends ArrayAdapter<StateVO> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int getPosition = (Integer) buttonView.getTag();
-
+                if (!isFromView) {
+                    listState.get(getPosition).setSelected(isChecked);
+                }
 
             }
         });

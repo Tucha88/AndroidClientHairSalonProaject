@@ -1,21 +1,20 @@
 package com.telran.borislav.hairsalonclientproject.tasks;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.Response;
 import com.telran.borislav.hairsalonclientproject.MainActivity;
 import com.telran.borislav.hairsalonclientproject.SecondActivity;
 import com.telran.borislav.hairsalonclientproject.models.Client;
-import com.telran.borislav.hairsalonclientproject.models.ClientAuthType;
 import com.telran.borislav.hairsalonclientproject.models.Token;
 import com.telran.borislav.hairsalonclientproject.providers.Provider;
 
 import java.io.IOException;
+
+import okhttp3.Response;
 
 /**
  * Created by Boris on 12.04.2017.

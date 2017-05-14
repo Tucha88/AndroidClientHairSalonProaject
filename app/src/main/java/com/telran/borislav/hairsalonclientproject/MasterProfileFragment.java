@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.telran.borislav.hairsalonclientproject.models.Master;
 import com.telran.borislav.hairsalonclientproject.models.Services;
+import com.telran.borislav.hairsalonclientproject.models.ServicesArray;
 import com.telran.borislav.hairsalonclientproject.models.StateVO;
 import com.telran.borislav.hairsalonclientproject.utils.MySpinnerAdapter;
 
@@ -23,12 +25,12 @@ import java.util.ArrayList;
  */
 
 public class MasterProfileFragment extends Fragment implements View.OnClickListener {
+    MySpinnerAdapter mySpinnerAdapter;
     private TransferredMasterListener masterListener;
     private Master master;
     private TextView masterName, masterEmail, masterAddress, masterDesctiption;
     private Button makeAppointmentBtn, cancelBtn;
     private Spinner masterServicer;
-
 
     public void setMasterListener(TransferredMasterListener masterListener) {
         this.masterListener = masterListener;
@@ -45,6 +47,8 @@ public class MasterProfileFragment extends Fragment implements View.OnClickListe
         masterServicer = (Spinner) view.findViewById(R.id.profile_master_services_text);
         makeAppointmentBtn = (Button) view.findViewById(R.id.profile_master_make_appointment_btn);
         cancelBtn = (Button) view.findViewById(R.id.profile_master_cancel_btn);
+        setMasterListener((TransferredMasterListener) getActivity());
+
 
         try {
             masterName.setText(master.getName() + " " + master.getLastName());
@@ -62,8 +66,9 @@ public class MasterProfileFragment extends Fragment implements View.OnClickListe
                 listVOs.add(stateVO);
             }
 
-            MySpinnerAdapter mySpinnerAdapter = new MySpinnerAdapter(getActivity(), 0, listVOs);
+            mySpinnerAdapter = new MySpinnerAdapter(getActivity(), 0, listVOs);
             masterServicer.setAdapter(mySpinnerAdapter);
+
 
         } catch (Exception e) {
         }
@@ -81,6 +86,26 @@ public class MasterProfileFragment extends Fragment implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.profile_master_make_appointment_btn:
+                ServicesArray servicesArray = new ServicesArray();
+                for (int i = 1; i < mySpinnerAdapter.getCount(); i++) {
+                    StateVO stateVO = mySpinnerAdapter.getItem(i);
+                    Log.d("TAG", "onClick: is it selected" + stateVO.getTitle());
+                    if (stateVO.isSelected()) {
+                        Services services = new Services();
+                        services = master.findServices(stateVO.getTitle());
+                        if (services != null) {
+                            servicesArray.add(services);
+                            Log.d("TAG", "onClick: this is master profile fragment" + master.findServices(stateVO.getTitle()).getService());
+
+                        }
+                    }
+                }
+
+                if (servicesArray.getServices().isEmpty()) {
+                    Toast.makeText(getActivity(), "Chose services please", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                masterListener.transferMaster(servicesArray, master);
                 break;
             case R.id.profile_master_cancel_btn:
                 getActivity().getFragmentManager().popBackStack();
@@ -89,6 +114,6 @@ public class MasterProfileFragment extends Fragment implements View.OnClickListe
 
     }
     interface TransferredMasterListener {
-        void transferMaster(Master masterTransfer);
+        void transferMaster(ServicesArray services, Master master);
     }
 }

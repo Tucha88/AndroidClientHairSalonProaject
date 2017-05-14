@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.telran.borislav.hairsalonclientproject.models.Master;
+import com.telran.borislav.hairsalonclientproject.models.ServicesArray;
 
 public class SecondActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MapFragment.showSelectedMasterListener, MasterProfileFragment.TransferredMasterListener {
@@ -26,6 +27,7 @@ public class SecondActivity extends AppCompatActivity
     private FragmentManager manager;
     private FragmentTransaction transaction;
     private Master master1;
+    private ServicesArray servicesArray1;
 
 
     @Override
@@ -99,6 +101,7 @@ public class SecondActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_appointment) {
             manager = getFragmentManager();
+            manager.popBackStack();
             MapFragment fragment = new MapFragment();
             fragment.setSelectedMasterListener(this);
             transaction = manager.beginTransaction();
@@ -134,7 +137,7 @@ public class SecondActivity extends AppCompatActivity
         transaction.addToBackStack("FRAG_MASTER_PROF");
 
 
-        fragment.setMasterListener(this);
+//        fragment.setMasterListener(this);
         fragment.getMyMaster(master1);
 
         transaction.commit();
@@ -142,7 +145,16 @@ public class SecondActivity extends AppCompatActivity
     }
 
     @Override
-    public void transferMaster(Master masterTransfer) {
-
+    public void transferMaster(ServicesArray servicesArray, Master master) {
+        this.master1 = master;
+        this.servicesArray1 = servicesArray;
+        CalendarFragment calendarFragment = new CalendarFragment();
+        manager = getFragmentManager();
+        transaction = manager.beginTransaction();
+        // TODO: 13.05.2017 добавить метод для обращение на сервер для заполнения календаря
+        transaction.replace(R.id.second_fragment_controller, calendarFragment, "CALENDAR_FRAGMENT");
+        transaction.addToBackStack("CALENDAR_FRAGMENT");
+        transaction.commit();
+        calendarFragment.setMasterAndServices(servicesArray1, master1);
     }
 }

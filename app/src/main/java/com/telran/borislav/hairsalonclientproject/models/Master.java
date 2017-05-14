@@ -103,4 +103,15 @@ public class Master {
     public void setAddresses(String addresses) {
         this.addresses = addresses;
     }
+
+    public Services findServices(String name) {
+        Services services1 = new Services();
+        for (Services services : this.serivce) {
+            if (services.getService().equals(name)) {
+                services1 = services;
+                return services1;
+            }
+        }
+        return null;
+    }
 }
