@@ -15,11 +15,12 @@ import okhttp3.Response;
 public class Provider {
     private static final String BASE_URL = "https://hair-salon-personal.herokuapp.com/";
     private static Provider instance = null;
-    private Provider(){
+
+    private Provider() {
     }
 
-    public static Provider getInstance(){
-        if(instance == null){
+    public static Provider getInstance() {
+        if (instance == null) {
             instance = new Provider();
         }
         return instance;
@@ -28,11 +29,11 @@ public class Provider {
     public Response post(String path, String data, String token) throws IOException {
         OkHttpClient client = new OkHttpClient();
         MediaType type = MediaType.parse("application/json; charset=utf-8");
-        RequestBody requestBody = RequestBody.create(type,data);
+        RequestBody requestBody = RequestBody.create(type, data);
         Request request = new Request.Builder()
                 .url(BASE_URL + path)
                 .post(requestBody)
-                .addHeader("Authorization",token)
+                .addHeader("Authorization", token)
                 .build();
 
         Response response = client.newCall(request).execute();
@@ -42,11 +43,11 @@ public class Provider {
     public Response put(String path, String data, String token) throws IOException {
         OkHttpClient client = new OkHttpClient();
         MediaType type = MediaType.parse("application/json; charset=utf-8");
-        RequestBody requestBody = RequestBody.create(type,data);
+        RequestBody requestBody = RequestBody.create(type, data);
         Request request = new Request.Builder()
                 .url(BASE_URL + path)
                 .put(requestBody)
-                .addHeader("Authorization",token)
+                .addHeader("Authorization", token)
                 .build();
 
         Response response = client.newCall(request).execute();
@@ -59,7 +60,7 @@ public class Provider {
         Request request = new Request.Builder()
                 .url(BASE_URL + path)
                 .get()
-                .addHeader("Authorization",token)
+                .addHeader("Authorization", token)
                 .build();
 
         Response response = client.newCall(request).execute();

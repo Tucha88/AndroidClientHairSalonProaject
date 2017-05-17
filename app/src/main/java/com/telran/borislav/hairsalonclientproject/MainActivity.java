@@ -24,20 +24,21 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Tra
         manager = getFragmentManager();
         Fragment fragment = new LoginFragment();
         transaction = manager.beginTransaction();
-        transaction.add(R.id.framgent_container,fragment,"FRAG_LOGIN");
+        transaction.add(R.id.framgent_container, fragment, "FRAG_LOGIN");
         transaction.addToBackStack("FRAG1");
         transaction.commit();
         SharedPreferences sharedPreferences = getSharedPreferences("AUTH", MODE_PRIVATE);
-        if (!sharedPreferences.getString("TOKEN","").isEmpty()){
-            startActivityForResult(new Intent(this, SecondActivity.class),1);
+        if (!sharedPreferences.getString("TOKEN", "").isEmpty()) {
+            startActivityForResult(new Intent(this, SecondActivity.class), 1);
 
         }
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == 1){
-                finish();
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            finish();
         }
     }
 
@@ -50,18 +51,19 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Tra
     @Override
     public void goToNextFragment(int whatFragmentToGo) {
         Fragment fragment1 = new RegisterFragment();
-        switch (whatFragmentToGo){
+        switch (whatFragmentToGo) {
             case Util.START_SIGNEUP:
                 transaction = manager.beginTransaction();
-                transaction.replace(R.id.framgent_container,fragment1,"FRAG_REGISTER");
+                transaction.replace(R.id.framgent_container, fragment1, "FRAG_REGISTER");
                 transaction.addToBackStack("FRAG3");
                 transaction.commit();
                 break;
         }
 
     }
-    public void toastMethod(String s){
-        Toast.makeText(this,s,Toast.LENGTH_LONG).show();
+
+    public void toastMethod(String s) {
+        Toast.makeText(this, s, Toast.LENGTH_LONG).show();
     }
 
     public void doOnPostExecute() {

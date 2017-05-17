@@ -74,7 +74,7 @@ public class LoginTask extends AsyncTask<Void, Void, String> {
         if (s.equals("Registration ok!")) {
             MainActivity activity = (MainActivity) context;
             activity.doOnPostExecuteLogin();
-            activity.startActivityForResult(new Intent(context, SecondActivity.class),1);
+            activity.startActivityForResult(new Intent(context, SecondActivity.class), 1);
         } else {
             MainActivity activity1 = (MainActivity) context;
             activity1.doOnPostExecuteLogin();

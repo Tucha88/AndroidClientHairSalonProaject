@@ -113,6 +113,7 @@ public class MasterProfileFragment extends Fragment implements View.OnClickListe
         }
 
     }
+
     interface TransferredMasterListener {
         void transferMaster(ServicesArray services, Master master);
     }

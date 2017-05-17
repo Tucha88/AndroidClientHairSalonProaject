@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Boris on 05.05.2017.
  */

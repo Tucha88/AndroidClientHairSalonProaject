@@ -62,7 +62,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             client = new Client(clientPhoneNumber, clientEmail, clientPassword, clientName, clientLastName);
             Log.d("MY_TAG", "onClick: this is client" + client.toString());
 
-            new RegistrationTask(client,"register/client/",getActivity()).execute();        }
+            new RegistrationTask(client, "register/client/", getActivity()).execute();
+        }
         if (view.getId() == R.id.cancel_registration_btn) {
             getActivity().getFragmentManager().popBackStack();
         }
