@@ -148,6 +148,7 @@ public class SecondActivity extends AppCompatActivity
 
     }
 
+
     @Override
     public void transferMaster(ServicesArray servicesArray, Master master) {
         this.master1 = master;
