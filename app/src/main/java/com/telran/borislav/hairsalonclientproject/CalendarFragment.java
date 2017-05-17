@@ -15,7 +15,6 @@ import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.telran.borislav.hairsalonclientproject.models.Master;
-import com.telran.borislav.hairsalonclientproject.models.Services;
 import com.telran.borislav.hairsalonclientproject.models.ServicesArray;
 
 import java.text.SimpleDateFormat;
@@ -122,7 +121,7 @@ public class CalendarFragment extends Fragment implements WeekView.EventClickLis
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         // Populate the week view with some events.
-        List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
+//        List<WeekViewEvent> events = ;
 /*
         Calendar startTime = Calendar.getInstance();
         startTime.set(Calendar.HOUR_OF_DAY, 3);
@@ -136,7 +135,7 @@ public class CalendarFragment extends Fragment implements WeekView.EventClickLis
         event.setColor(getResources().getColor(R.color.event_color_01));
         events.add(event);*/
 
-        return events;
+        return new ArrayList<>();
 
     }
 

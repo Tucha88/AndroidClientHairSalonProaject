@@ -1,7 +1,6 @@
 package com.telran.borislav.hairsalonclientproject;
 
 import android.app.Fragment;
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -35,10 +34,8 @@ import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -49,7 +46,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public static final String TAG = "ONTAG";
     private static final String PATH = "/guest/list";
 
-    String result = "OK";
 
     LatLng latLng = null;
     private MapView mMapView;
@@ -89,10 +85,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         if (masterLatLngMap.isEmpty()) {
             new GetAllMasters().execute();
-            Log.d(TAG, "onCreateView: 1");
         } else {
             handler.post(new FillMap());
-            Log.d(TAG, "onCreateView: 2");
         }
 
         return rootView;
@@ -160,7 +154,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 
     class GetAllMasters extends AsyncTask<Void, Void, Void> {
-        public GetAllMasters() {
+        private GetAllMasters() {
         }
 
 
@@ -221,7 +215,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     class FillMap implements Runnable {
 
 
-        public FillMap() {
+        private FillMap() {
         }
 
         @Override
@@ -240,9 +234,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 
     private class ErrorRequest implements Runnable {
-        protected String s;
+        private String s;
 
-        public ErrorRequest(String s) {
+        private ErrorRequest(String s) {
             this.s = s;
         }
 

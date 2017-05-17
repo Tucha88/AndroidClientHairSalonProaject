@@ -12,8 +12,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.telran.borislav.hairsalonclientproject.R;
-import com.telran.borislav.hairsalonclientproject.models.Client;
 import com.telran.borislav.hairsalonclientproject.models.ClientAuthType;
 import com.telran.borislav.hairsalonclientproject.tasks.LoginTask;
 import com.telran.borislav.hairsalonclientproject.utils.Util;

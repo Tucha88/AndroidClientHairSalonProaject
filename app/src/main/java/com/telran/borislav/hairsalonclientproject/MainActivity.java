@@ -5,11 +5,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Toast;
+
 import com.telran.borislav.hairsalonclientproject.utils.Util;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.TransactionControllerListener/*, RegisterFragment.RegisterButtonListener*/ {

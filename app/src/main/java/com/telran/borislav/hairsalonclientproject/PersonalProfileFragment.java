@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.telran.borislav.hairsalonclientproject.tasks.ClientProfileTask;
-
 /**
  * Created by Boris on 20.04.2017.
  */

@@ -1,8 +1,6 @@
 package com.telran.borislav.hairsalonclientproject;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.telran.borislav.hairsalonclientproject.models.Client;
 import com.telran.borislav.hairsalonclientproject.tasks.RegistrationTask;
@@ -80,11 +77,11 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         String clientName = nameEditText.getText().toString();
         String clientLastName = lastNameEditText.getText().toString();
         String clientPasswordCheck = passwordCheckEditText.getText().toString();
-        if (clientEmail.isEmpty() || clientEmail == null || !clientEmail.contains("@")) {
+        if (clientEmail.isEmpty() || !clientEmail.contains("@")) {
             emailEditText.setError("Enter a valid email");
             valid = false;
         }
-        if (clientPassword == null || clientPassword.isEmpty() || !clientPassword.equals(clientPasswordCheck)) {
+        if (clientPassword.isEmpty() || !clientPassword.equals(clientPasswordCheck)) {
             passwordEditText.setError("Enter valid password");
             valid = false;
         }
