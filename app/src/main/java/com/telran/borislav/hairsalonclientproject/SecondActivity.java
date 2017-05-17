@@ -57,6 +57,12 @@ public class SecondActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        manager = getFragmentManager();
+        MapFragment fragment = new MapFragment();
+        fragment.setSelectedMasterListener(this);
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.second_fragment_controller, fragment, "FRAG_MAP");
+        transaction.commit();
     }
 
     @Override
@@ -98,17 +104,17 @@ public class SecondActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
+            for (int i = 0; i < manager.getBackStackEntryCount(); i++) {
+                manager.popBackStack();
+            }
 
         } else if (id == R.id.nav_appointment) {
             manager = getFragmentManager();
-            manager.popBackStack();
-            MapFragment fragment = new MapFragment();
-            fragment.setSelectedMasterListener(this);
+            PersonalProfileFragment personalProfileFragment = new PersonalProfileFragment();
             transaction = manager.beginTransaction();
-            transaction.replace(R.id.second_fragment_controller, fragment, "FRAG_MAP");
-            transaction.addToBackStack("FRAG_MAP");
+            transaction.replace(R.id.second_fragment_controller, personalProfileFragment, "PERSONAL_PROFILE");
+            transaction.addToBackStack("PERSONAL_PROFILE");
             transaction.commit();
-
         } else if (id == R.id.nav_favorite) {
 
         } else if (id == R.id.nav_exit) {

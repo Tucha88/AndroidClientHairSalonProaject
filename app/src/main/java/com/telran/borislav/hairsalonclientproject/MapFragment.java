@@ -29,7 +29,9 @@ import com.telran.borislav.hairsalonclientproject.models.MasterArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -46,17 +48,19 @@ import okhttp3.Response;
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
     public static final String TAG = "ONTAG";
     private static final String PATH = "/guest/list";
+
+    String result = "OK";
+
     LatLng latLng = null;
     private MapView mMapView;
     private GoogleMap googleMap;
     private RadioGroup radioGroup;
     private EditText findByAddres;
-    private String[] strTest;
     private Handler handler;
-    private MasterArray masterArray = new MasterArray();
+    private MasterArray masterArray;
     private Geocoder geocoder;
     private showSelectedMasterListener selectedMasterListener;
-
+    private Map<Master, LatLng> masterLatLngMap = new HashMap<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +74,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
-        strTest = getResources().getStringArray(R.array.addresses);
         radioGroup = (RadioGroup) rootView.findViewById(R.id.check_box);
         findByAddres = (EditText) rootView.findViewById(R.id.finder_field_edit_text);
         handler = new Handler();
@@ -84,8 +87,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mMapView.getMapAsync(this);
 
 
-        new GetAllMasters().execute();
-
+        if (masterLatLngMap.isEmpty()) {
+            new GetAllMasters().execute();
+            Log.d(TAG, "onCreateView: 1");
+        } else {
+            handler.post(new FillMap());
+            Log.d(TAG, "onCreateView: 2");
+        }
 
         return rootView;
     }
@@ -122,12 +130,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap mMap) {
         googleMap = mMap;
         googleMap.setOnMarkerClickListener(this);
-        // For showing a move to my location button
-//         googleMap.setMyLocationEnabled(true);
-
-//        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(12).build();
-//        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
 
         googleMap.setOnInfoWindowClickListener(this);
 
@@ -135,7 +137,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Log.d(TAG, "onMarkerClick: " + marker.getTitle());
         return false;
     }
 
@@ -149,7 +150,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 break;
             }
         }
-        Log.d(TAG, "onInfoWindowClick: " + master.getEmail() + master.getAddresses());
         selectedMasterListener.showMaster(master);
     }
 
@@ -158,23 +158,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         void showMaster(Master master);
     }
 
+
     class GetAllMasters extends AsyncTask<Void, Void, Void> {
         public GetAllMasters() {
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AUTH", getActivity().MODE_PRIVATE);
-            String token = sharedPreferences.getString("TOKEN", "");
-            Log.d(TAG, "getAllMasters: " + token);
 
-            MediaType type = MediaType.parse("application/json; charset=utf-8");
-            RequestBody requestBody = RequestBody.create(type, "");
             Request request = new Request.Builder()
                     .url("https://hair-salon-personal.herokuapp.com/" + PATH)
                     .get()
@@ -188,6 +180,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     handler.post(new ErrorRequest("wrong Number"));
                 }
 
+
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     Log.d(TAG, "onResponse: " + response.code());
@@ -197,53 +190,49 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                         masterArray = gson.fromJson(response.body().string(), MasterArray.class);
                         if (masterArray != null) {
                             for (Master master : masterArray.getMasters()) {
-                                Log.d(TAG, "addMarkersToMap: " + master.getEmail() + master.getAddresses());
                                 if (master.getAddresses() != null) {
                                     try {
                                         List<Address> address = geocoder.getFromLocationName(master.getAddresses(), 1);
                                         Address location = address.get(0);
-                                        location.getLatitude();
-                                        location.getLongitude();
                                         latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                                        masterLatLngMap.put(master, latLng);
 
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
-                                    handler.post(new FillMap(latLng, master));
                                 }
 
                             }
 
                         }
 
-
                     } else if (response.code() == 401) {
-                        new ErrorRequest("WTF");
+                        Toast.makeText(getActivity(), response.message(), Toast.LENGTH_LONG).show();
+                        return;
                     }
+                    handler.post(new FillMap());
                 }
-
-
             });
             return null;
         }
     }
 
-    class FillMap implements Runnable {
-        LatLng latLng;
-        Master master;
 
-        public FillMap(LatLng latLng, Master master) {
-            this.latLng = latLng;
-            this.master = master;
+    class FillMap implements Runnable {
+
+
+        public FillMap() {
         }
 
         @Override
         public void run() {
             try {
-                googleMap.addMarker(new MarkerOptions().position(latLng).title(master.getEmail()).snippet(master.getAddresses()));
+                for (Map.Entry<Master, LatLng> entry : masterLatLngMap.entrySet()) {
+                    googleMap.addMarker(new MarkerOptions().position(entry.getValue()).title(entry.getKey().getEmail()).snippet(entry.getKey().getAddresses()));
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
 
         }

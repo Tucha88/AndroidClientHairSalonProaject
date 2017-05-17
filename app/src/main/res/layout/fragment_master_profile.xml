@@ -37,16 +37,16 @@
 
 
             <ImageView
-                android:id="@+id/add_friend"
+                android:id="@+id/profile_client_favorite_masters"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_toLeftOf="@+id/drop_down_option_menu"
+                android:layout_toLeftOf="@+id/profile_client_edit"
                 android:src="@drawable/ic_action_user_add" />
 
             <ImageView
-                android:id="@+id/drop_down_option_menu"
+                android:id="@+id/profile_client_edit"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
@@ -58,7 +58,7 @@
                 android:id="@+id/profile_master_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/add_friend"
+                android:layout_below="@+id/profile_client_favorite_masters"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="29dp"
                 android:text="Viral Android"

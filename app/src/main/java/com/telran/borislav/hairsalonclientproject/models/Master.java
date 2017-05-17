@@ -114,4 +114,9 @@ public class Master {
         }
         return null;
     }
+
+    @Override
+    public int hashCode() {
+        return email.hashCode();
+    }
 }
