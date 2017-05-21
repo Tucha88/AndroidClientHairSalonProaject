@@ -162,4 +162,5 @@ public class SecondActivity extends AppCompatActivity
         transaction.commit();
         calendarFragment.setMasterAndServices(servicesArray1, master1);
     }
+
 }

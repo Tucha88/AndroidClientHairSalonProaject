@@ -2,6 +2,7 @@ package com.telran.borislav.hairsalonclientproject;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,14 +13,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.telran.borislav.hairsalonclientproject.models.Client;
+import com.telran.borislav.hairsalonclientproject.models.Token;
+import com.telran.borislav.hairsalonclientproject.tasks.GetClientProfileTask;
+import com.telran.borislav.hairsalonclientproject.utils.Util;
+
 /**
  * Created by Boris on 20.04.2017.
  */
 
-public class PersonalProfileFragment extends Fragment implements View.OnClickListener {
+public class PersonalProfileFragment extends Fragment implements View.OnClickListener, GetClientProfileTask.AsyncResponse {
     private TextView clientFullName, clientEmail, clientPhoneNumber;
     private Button findMasterBtn;
     private ImageView favoriteMasters, editProfile;
+    private Client client;
 
 
     @Override
@@ -48,6 +56,10 @@ public class PersonalProfileFragment extends Fragment implements View.OnClickLis
         findMasterBtn.setOnClickListener(this);
         favoriteMasters.setOnClickListener(this);
         editProfile.setOnClickListener(this);
+        setViewClientProfile();
+
+
+
         return view;
     }
 
@@ -72,4 +84,42 @@ public class PersonalProfileFragment extends Fragment implements View.OnClickLis
                 break;
         }
     }
+
+    @Override
+    public void processFinish() {
+        setViewClientProfile();
+    }
+
+    private Token getToken() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AUTH", Context.MODE_PRIVATE);
+        Token token = new Token();
+
+        token.setToken(sharedPreferences.getString("TOKEN", ""));
+//        if (token.equals("")){
+//            return null;
+//        }
+        return token;
+    }
+
+    private void setViewClientProfile() {
+        try {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("PERSONAL", getActivity().MODE_PRIVATE);
+            Gson gson = new Gson();
+            client = gson.fromJson(sharedPreferences.getString("CLIENT", null), Client.class);
+            if (client == null) {
+                new GetClientProfileTask(getToken(), Util.INFO_CLIENT, getActivity(), this).execute();
+                return;
+            }
+            clientFullName.setText(client.getClientLastName() + " " + client.getClientName());
+            clientPhoneNumber.setText(client.getClientPhoneNumber());
+            clientEmail.setText(client.getClientEmail());
+        } catch (Exception e) {
+            clientFullName.setText("Enter your name");
+            clientPhoneNumber.setText("enter your phone number");
+            e.printStackTrace();
+
+        }
+
+    }
+
 }
