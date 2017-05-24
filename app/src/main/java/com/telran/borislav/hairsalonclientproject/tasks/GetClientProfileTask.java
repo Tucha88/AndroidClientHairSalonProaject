@@ -20,8 +20,7 @@ import okhttp3.Response;
  */
 
 public class GetClientProfileTask extends AsyncTask<Void, Void, String> {
-    public AsyncResponse delegate = null;
-    private PersonalProfileFragment profileFragment;
+    public AsyncResponse delegate;
     private Token token;
     private String path;
     private Context context;

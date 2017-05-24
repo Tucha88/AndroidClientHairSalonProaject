@@ -120,6 +120,10 @@ public class SecondActivity extends AppCompatActivity
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("TOKEN", "");
             editor.commit();
+            sharedPreferences = getSharedPreferences("PERSONAL", MODE_PRIVATE);
+            editor = sharedPreferences.edit();
+            editor.remove("CLIENT");
+            editor.commit();
             setResult(RESULT_CANCELED);
             finish();
 
